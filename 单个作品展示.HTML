@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>茶饮品牌视觉全案 - 你的名字 | 设计师作品集</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- 引入Inter字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 自定义配置 -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1A1A1A',
+                        secondary: '#F8F9FA',
+                        accent: '#007AFF',
+                        dark: {
+                            primary: '#F8F9FA',
+                            secondary: '#2D2D2D',
+                            accent: '#5AC8FA'
+                        }
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.8s ease-in-out',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-balance {
+                text-wrap: balance;
+            }
+            .nav-link {
+                @apply px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-accent dark:hover:text-dark-accent transition-colors duration-300;
+            }
+            .project-nav-btn {
+                @apply w-12 h-12 rounded-full bg-white dark:bg-dark-secondary flex items-center justify-center text-primary dark:text-dark-primary hover:bg-accent dark:hover:bg-dark-accent hover:text-white transition-all duration-300 shadow-md;
+            }
+        }
+    </style>
+</head>
+<body class="bg-secondary dark:bg-primary font-inter text-gray-800 dark:text-gray-200 antialiased">
+    <!-- 进度条 -->
+    <div id="progressBar" class="fixed top-0 left-0 h-1 bg-accent dark:bg-dark-accent z-50 origin-left w-0 transition-all duration-300"></div>
+
+    <!-- 暗黑模式切换 -->
+    <button id="themeToggle" class="fixed top-6 right-6 z-50 w-10 h-10 rounded-full bg-white/80 dark:bg-dark-secondary/80 backdrop-blur-sm flex items-center justify-center text-primary dark:text-dark-primary hover:bg-accent/10 dark:hover:bg-dark-accent/20 transition-all duration-300">
+        <i class="fas fa-moon dark:hidden text-xl"></i>
+        <i class="fas fa-sun hidden dark:block text-xl"></i>
+    </button>
+
+    <!-- 导航栏 -->
+    <nav class="fixed w-full bg-white/90 dark:bg-primary/90 backdrop-blur-md z-40 border-b border-gray-100 dark:border-gray-800 transition-all duration-500">
+        <div class="container mx-auto px-6 md:px-12 py-5 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-primary dark:text-dark-primary tracking-tight">你的名字</a>
+            
+            <!-- 桌面端导航 -->
+            <div class="hidden md:flex items-center space-x-1">
+                <a href="index.html#hero" class="nav-link">首页</a>
+                <a href="index.html#works" class="nav-link">作品</a>
+                <a href="index.html#about" class="nav-link">关于</a>
+                <a href="index.html#contact" class="nav-link">联系</a>
+            </div>
+            
+            <!-- 移动端菜单按钮 -->
+            <button id="menuBtn" class="md:hidden text-primary dark:text-dark-primary text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div id="mobileMenu" class="md:hidden hidden bg-white dark:bg-primary border-b border-gray-100 dark:border-gray-800 animate-fade-in">
+            <div class="container mx-auto px-6 py-4 flex flex-col space-y-3">
+                <a href="index.html#hero" class="nav-link py-3">首页</a>
+                <a href="index.html#works" class="nav-link py-3">作品</a>
+                <a href="index.html#about" class="nav-link py-3">关于</a>
+                <a href="index.html#contact" class="nav-link py-3">联系</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 作品详情头部 -->
+    <section class="pt-32 pb-16 px-6 md:px-12">
+        <div class="container mx-auto max-w-6xl">
+            <!-- 面包屑导航 -->
+            <div class="mb-8 text-sm text-gray-500 dark:text-gray-400">
+                <a href="index.html" class="hover:text-accent dark:hover:text-dark-accent">首页</a>
+                <span class="mx-2">/</span>
+                <a href="index.html#works" class="hover:text-accent dark:hover:text-dark-accent">作品</a>
+                <span class="mx-2">/</span>
+                <span>茶饮品牌视觉全案</span>
+            </div>
+            
+            <!-- 作品标题与标签 -->
+            <div class="mb-12 text-center">
+                <span class="inline-block px-4 py-1 rounded-full bg-accent/10 dark:bg-dark-accent/20 text-accent dark:text-dark-accent text-sm font-medium mb-4">品牌设计</span>
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-primary dark:text-dark-primary text-balance">茶饮品牌视觉全案</h1>
+                <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">为新锐茶饮品牌打造全套视觉识别系统，传递自然、简约、有温度的品牌理念</p>
+            </div>
+            
+            <!-- 作品主视觉 -->
+            <div class="rounded-xl overflow-hidden shadow-2xl dark:shadow-gray-800 mb-16">
+                <img src="https://picsum.photos/1200/600?random=101" alt="茶饮品牌视觉全案主视觉" class="w-full h-auto">
+            </div>
+            
+            <!-- 项目信息 -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
+                <div class="bg-white dark:bg-dark-secondary p-6 rounded-xl border border-gray-100 dark:border-gray-800">
+                    <h4 class="text-sm text-gray-500 dark:text-gray-400 mb-2">项目周期</h4>
+                    <p class="font-medium">2024.03 - 2024.05</p>
+                </div>
+                <div class="bg-white dark:bg-dark-secondary p-6 rounded-xl border border-gray-100 dark:border-gray-800">
+                    <h4 class="text-sm text-gray-500 dark:text-gray-400 mb-2">服务内容</h4>
+                    <p class="font-medium">LOGO设计、VI系统、包装设计、空间视觉</p>
+                </div>
+                <div class="bg-white dark:bg-dark-secondary p-6 rounded-xl border border-gray-100 dark:border-gray-800">
+                    <h4 class="text-sm text-gray-500 dark:text-gray-400 mb-2">客户类型</h4>
+                    <p class="font-medium">新锐茶饮品牌</p>
+                </div>
+                <div class="bg-white dark:bg-dark-secondary p-6 rounded-xl border border-gray-100 dark:border-gray-800">
+                    <h4 class="text-sm text-gray-500 dark:text-gray-400 mb-2">设计工具</h4>
+                    <p class="font-medium">Figma, Illustrator, Photoshop</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 项目介绍 -->
+    <section class="py-16 px-6 md:px-12 bg-white dark:bg-dark-secondary">
+        <div class="container mx-auto max-w-4xl">
+            <h2 class="text-3xl font-bold mb-8 text-primary dark:text-dark-primary">项目背景</h2>
+            <div class="prose prose-lg dark:prose-invert max-w-none mb-16">
+                <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    客户是一家新锐茶饮品牌，主打原叶鲜萃茶饮，定位年轻、自然、有品质的消费群体。品牌初期缺乏完整的视觉体系，希望通过专业的品牌设计建立差异化竞争优势，提升品牌辨识度和溢价能力。
+                </p>
+                <p class="text-gray-700 dark:text-gray-300 leading-relaxed mt-4">
+                    核心挑战在于：如何在竞争激烈的茶饮市场中，通过视觉设计传递品牌的"自然、简约、有温度"的核心价值观，同时保证视觉系统的实用性和延展性。
+                </p>
+            </div>
+            
+            <h2 class="text-3xl font-bold mb-8 text-primary dark:text-dark-primary">设计思路</h2>
+            <div class="prose prose-lg dark:prose-invert max-w-none mb-16">
+                <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    1. <strong>品牌核心提炼</strong>：从"自然、本味、温度"三个关键词出发，确定品牌视觉的核心调性；
+                </p>
+                <p class="text-gray-700 dark:text-gray-300 leading-relaxed mt-4">
+                    2. <strong>色彩体系</strong>：以浅青绿色为主色，搭配原木色和米白色，营造自然、清新的视觉感受；
+                </p>
+                <p class="text-gray-700 dark:text-gray-300 leading-relaxed mt-4">
+                    3. <strong>字体选择</strong>：选用无衬线字体搭配手写体，平衡简约与温度感；
+                </p>
+                <p class="text-gray-700 dark:text-gray-300 leading-relaxed mt-4">
+                    4. <strong>图形设计</strong>：将茶叶形态抽象化，结合水滴元素，打造简洁易记的LOGO符号。
+                </p>
+            </div>
+            
+            <!-- 设计成果展示 -->
+            <h2 class="text-3xl font-bold mb-8 text-primary dark:text-dark-primary">设计成果</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                <div class="rounded-xl overflow-hidden shadow-lg">
+                    <img src="https://picsum.photos/800/600?random=102" alt="LOGO设计方案" class="w-full h-auto hover:scale-105 transition-transform duration-700">
+                </div>
+                <div class="rounded-xl overflow-hidden shadow-lg">
+                    <img src="https://picsum.photos/800/600?random=103" alt="VI应用系统" class="w-full h-auto hover:scale-105 transition-transform duration-700">
+                </div>
+            </div>
+            
+            <div class="rounded-xl overflow-hidden shadow-lg mb-16">
+                <img src="https://picsum.photos/1200/800?random=104" alt="包装设计展示" class="w-full h-auto hover:scale-105 transition-transform duration-700">
+            </div>
+            
+            <h2 class="text-3xl font-bold mb-8 text-primary dark:text-dark-primary">项目总结</h2>
+            <div class="prose prose-lg dark:prose-invert max-w-none">
+                <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    本次品牌视觉设计帮助客户建立了清晰的品牌形象，上线后品牌识别度提升80%，门店客流量增长40%。设计方案既满足了品牌的商业需求，又保持了设计的艺术性和独特性，实现了商业与美学的平衡。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 作品导航 -->
+    <section class="py-16 px-6 md:px-12">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+                <a href="work-detail-2.html" class="project-nav-btn">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+                <a href="index.html#works" class="px-8 py-3 rounded-lg border border-gray-300 dark:border-gray-700 text-primary dark:text-dark-primary hover:border-accent dark:hover:border-dark-accent hover:text-accent dark:hover:text-dark-accent transition-all duration-300">
+                    返回作品列表
+                </a>
+                <a href="work-detail-3.html" class="project-nav-btn">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-primary dark:bg-dark-secondary py-16 px-6 md:px-12">
+        <div class="container mx-auto max-w-7xl">
+            <div class="flex flex-col md:flex-row justify-between items-center border-b border-gray-800 dark:border-gray-700 pb-12 mb-12">
+                <div class="mb-8 md:mb-0">
+                    <h3 class="text-3xl font-bold text-white dark:text-dark-primary mb-4">你的名字</h3>
+                    <p class="text-gray-500 dark:text-gray-400">创造有价值的设计</p>
+                </div>
+                
+                <div class="flex gap-6">
+                    <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-white dark:hover:text-dark-primary transition-colors duration-300">
+                        <i class="fab fa-behance text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-white dark:hover:text-dark-primary transition-colors duration-300">
+                        <i class="fab fa-dribbble text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-white dark:hover:text-dark-primary transition-colors duration-300">
+                        <i class="fab fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-white dark:hover:text-dark-primary transition-colors duration-300">
+                        <i class="fab fa-linkedin text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="text-center text-gray-500 dark:text-gray-400">
+                <p>© 2025 你的名字. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 脚本 -->
+    <script>
+        // 暗黑模式切换
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        });
+
+        // 移动端菜单切换
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = menuBtn.querySelector('i');
+            icon.classList.replace(icon.classList.contains('fa-bars') ? 'fa-bars' : 'fa-times', icon.classList.contains('fa-bars') ? 'fa-times' : 'fa-bars');
+        });
+
+        // 滚动进度条
+        const progressBar = document.getElementById('progressBar');
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.offsetHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            progressBar.style.width = scrollPercent + '%';
+            
+            // 导航栏滚动效果
+            const nav = document.querySelector('nav');
+            if (scrollTop > 50) {
+                nav.classList.add('shadow-md');
+                nav.classList.remove('py-5');
+                nav.classList.add('py-3');
+            } else {
+                nav.classList.remove('shadow-md');
+                nav.classList.add('py-5');
+                nav.classList.remove('py-3');
+            }
+        });
+    </script>
+</body>
+</html>

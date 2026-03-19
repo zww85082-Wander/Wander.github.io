@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>你的名字 - 高级设计师作品集</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- 引入Inter字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 自定义配置 -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // 启用暗黑模式切换
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1A1A1A', // 深黑（主色）
+                        secondary: '#F8F9FA', // 浅灰（辅助色）
+                        accent: '#007AFF', // 高级蓝（强调色）
+                        dark: {
+                            primary: '#F8F9FA',
+                            secondary: '#2D2D2D',
+                            accent: '#5AC8FA'
+                        }
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.8s ease-in-out',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-balance {
+                text-wrap: balance;
+            }
+            .work-card {
+                @apply relative overflow-hidden rounded-xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl dark:shadow-gray-800;
+            }
+            .work-card-overlay {
+                @apply absolute inset-0 bg-primary/90 dark:bg-dark-secondary/90 flex flex-col justify-end p-8 opacity-0 transition-opacity duration-500 hover:opacity-100;
+            }
+            .nav-link {
+                @apply px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-accent dark:hover:text-dark-accent transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-accent dark:after:bg-dark-accent after:transition-all after:duration-300 hover:after:w-full;
+            }
+            .filter-btn {
+                @apply px-4 py-2 rounded-lg transition-all duration-300 hover:bg-accent/10 dark:hover:bg-dark-accent/20 text-gray-700 dark:text-gray-300 hover:text-accent dark:hover:text-dark-accent;
+            }
+            .filter-btn.active {
+                @apply bg-accent/20 dark:bg-dark-accent/30 text-accent dark:text-dark-accent font-medium;
+            }
+            .parallax {
+                @apply transition-transform duration-700 ease-out;
+            }
+        }
+    </style>
+</head>
+<body class="bg-secondary dark:bg-primary font-inter text-gray-800 dark:text-gray-200 antialiased">
+    <!-- 进度条 -->
+    <div id="progressBar" class="fixed top-0 left-0 h-1 bg-accent dark:bg-dark-accent z-50 origin-left w-0 transition-all duration-300"></div>
+
+    <!-- 暗黑模式切换 -->
+    <button id="themeToggle" class="fixed top-6 right-6 z-50 w-10 h-10 rounded-full bg-white/80 dark:bg-dark-secondary/80 backdrop-blur-sm flex items-center justify-center text-primary dark:text-dark-primary hover:bg-accent/10 dark:hover:bg-dark-accent/20 transition-all duration-300">
+        <i class="fas fa-moon dark:hidden text-xl"></i>
+        <i class="fas fa-sun hidden dark:block text-xl"></i>
+    </button>
+
+    <!-- 导航栏 -->
+    <nav class="fixed w-full bg-white/90 dark:bg-primary/90 backdrop-blur-md z-40 border-b border-gray-100 dark:border-gray-800 transition-all duration-500">
+        <div class="container mx-auto px-6 md:px-12 py-5 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-primary dark:text-dark-primary tracking-tight">你的名字</a>
+            
+            <!-- 桌面端导航 -->
+            <div class="hidden md:flex items-center space-x-1">
+                <a href="#hero" class="nav-link">首页</a>
+                <a href="#works" class="nav-link">作品</a>
+                <a href="#about" class="nav-link">关于</a>
+                <a href="#contact" class="nav-link">联系</a>
+            </div>
+            
+            <!-- 移动端菜单按钮 -->
+            <button id="menuBtn" class="md:hidden text-primary dark:text-dark-primary text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div id="mobileMenu" class="md:hidden hidden bg-white dark:bg-primary border-b border-gray-100 dark:border-gray-800 animate-fade-in">
+            <div class="container mx-auto px-6 py-4 flex flex-col space-y-3">
+                <a href="#hero" class="nav-link py-3">首页</a>
+                <a href="#works" class="nav-link py-3">作品</a>
+                <a href="#about" class="nav-link py-3">关于</a>
+                <a href="#contact" class="nav-link py-3">联系</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区（视差效果） -->
+    <section id="hero" class="min-h-screen pt-32 pb-20 px-6 md:px-12 flex items-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-secondary to-white dark:from-primary dark:to-dark-secondary z-0"></div>
+        <!-- 装饰元素 -->
+        <div class="absolute top-1/4 right-10 w-96 h-96 bg-accent/5 dark:bg-dark-accent/10 rounded-full blur-3xl animate-pulse-slow z-0"></div>
+        <div class="absolute bottom-1/3 left-10 w-64 h-64 bg-accent/5 dark:bg-dark-accent/10 rounded-full blur-3xl animate-pulse-slow z-0"></div>
+        
+        <div class="container mx-auto max-w-5xl relative z-10">
+            <h1 class="text-5xl md:text-7xl font-bold mb-8 text-primary dark:text-dark-primary animate-slide-up text-balance">
+                设计<br>
+                <span class="text-accent dark:text-dark-accent">赋予价值</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-12 max-w-2xl animate-slide-up delay-100 text-balance">
+                专注于创造有温度、有商业价值的设计解决方案，让每一个作品都兼具美感与实用性。
+            </p>
+            <div class="flex flex-wrap gap-4 animate-slide-up delay-200">
+                <a href="#works" class="inline-block bg-accent dark:bg-dark-accent text-white px-8 py-4 rounded-lg font-medium hover:bg-accent/90 dark:hover:bg-dark-accent/90 transition-all duration-300 shadow-lg hover:shadow-xl">
+                    浏览作品 <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+                <a href="#contact" class="inline-block border border-gray-300 dark:border-gray-700 px-8 py-4 rounded-lg font-medium hover:border-accent dark:hover:border-dark-accent hover:text-accent dark:hover:text-dark-accent transition-all duration-300">
+                    合作咨询
+                </a>
+            </div>
+            
+            <!-- 滚动提示 -->
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+                <a href="#works" class="text-gray-500 dark:text-gray-500 hover:text-accent dark:hover:text-dark-accent transition-colors">
+                    <i class="fas fa-chevron-down text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 作品展示区（带分类筛选） -->
+    <section id="works" class="py-24 px-6 md:px-12 bg-white dark:bg-primary relative">
+        <div class="container mx-auto max-w-7xl">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4 text-primary dark:text-dark-primary text-center">我的作品</h2>
+            <p class="text-lg text-gray-600 dark:text-gray-400 mb-16 text-center max-w-2xl mx-auto">
+                精选商业项目与创意探索，涵盖品牌、UI/UX、视觉设计等多个领域
+            </p>
+            
+            <!-- 筛选按钮 -->
+            <div class="flex flex-wrap justify-center gap-3 mb-16">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="brand">品牌设计</button>
+                <button class="filter-btn" data-filter="ui">UI/UX设计</button>
+                <button class="filter-btn" data-filter="visual">视觉设计</button>
+                <button class="filter-btn" data-filter="packaging">包装设计</button>
+            </div>
+            
+            <!-- 作品网格 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 作品1 - 品牌设计 -->
+                <div class="work-card" data-category="brand">
+                    <img src="https://picsum.photos/800/600?random=1" alt="茶饮品牌视觉全案" class="w-full h-72 object-cover transition-transform duration-700 hover:scale-105">
+                    <div class="work-card-overlay">
+                        <h3 class="text-2xl font-bold text-white mb-3">茶饮品牌视觉全案</h3>
+                        <p class="text-gray-200 mb-6">为新锐茶饮品牌打造全套视觉识别系统，包括LOGO、VI、空间设计</p>
+                        <a href="#" class="text-white border border-white px-5 py-2 rounded-lg hover:bg-white hover:text-primary dark:hover:text-dark-primary transition-colors duration-300 w-fit">
+                            查看详情 <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 作品2 - UI/UX设计 -->
+                <div class="work-card" data-category="ui">
+                    <img src="https://picsum.photos/800/600?random=2" alt="健康管理APP设计" class="w-full h-72 object-cover transition-transform duration-700 hover:scale-105">
+                    <div class="work-card-overlay">
+                        <h3 class="text-2xl font-bold text-white mb-3">健康管理APP设计</h3>
+                        <p class="text-gray-200 mb-6">从用户研究到高保真原型，打造易用、美观的健康数据管理体验</p>
+                        <a href="#" class="text-white border border-white px-5 py-2 rounded-lg hover:bg-white hover:text-primary dark:hover:text-dark-primary transition-colors duration-300 w-fit">
+                            查看详情 <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 作品3 - 视觉设计 -->
+                <div class="work-card" data-category="visual">
+                    <img src="https://picsum.photos/800/600?random=3" alt="艺术展览视觉设计" class="w-full h-72 object-cover transition-transform duration-700 hover:scale-105">
+                    <div class="work-card-overlay">
+                        <h3 class="text-2xl font-bold text-white mb-3">艺术展览视觉设计</h3>
+                        <p class="text-gray-200 mb-6">为当代艺术展设计主视觉、海报、画册等全套视觉物料</p>
+                        <a href="#" class="text-white border border-white px-5 py-2 rounded-lg hover:bg-white hover:text-primary dark:hover:text-dark-primary transition-colors duration-300 w-fit">
+                            查看详情 <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 作品4 - 包装设计 -->
+                <div class="work-card" data-category="packaging">
+                    <img src="https://picsum.photos/800/600?random=4" alt="有机食品包装设计" class="w-full h-72 object-cover transition-transform duration-700 hover:scale-105">
+                    <div class="work-card-overlay">
+                        <h3 class="text-2xl font-bold text-white mb-3">有机食品包装设计</h3>
+                        <p class="text-gray-200 mb-6">环保材质+极简视觉，打造差异化的有机食品包装体系</p>
+                        <a href="#" class="text-white border border-white px-5 py-2 rounded-lg hover:bg-white hover:text-primary dark:hover:text-dark-primary transition-colors duration-300 w-fit">
+                            查看详情 <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 作品5 - 品牌设计 -->
+                <div class="work-card" data-category="brand">
+                    <img src="https://picsum.photos/800/600?random=5" alt="科技公司品牌升级" class="w-full h-72 object-cover transition-transform duration-700 hover:scale-105">
+                    <div class="work-card-overlay">
+                        <h3 class="text-2xl font-bold text-white mb-3">科技公司品牌升级</h3>
+                        <p class="text-gray-200 mb-6">为B2B科技企业重塑品牌形象，提升品牌专业度与国际感</p>
+                        <a href="#" class="text-white border border-white px-5 py-2 rounded-lg hover:bg-white hover:text-primary dark:hover:text-dark-primary transition-colors duration-300 w-fit">
+                            查看详情 <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 作品6 - UI/UX设计 -->
+                <div class="work-card" data-category="ui">
+                    <img src="https://picsum.photos/800/600?random=6" alt="电商网站改版设计" class="w-full h-72 object-cover transition-transform duration-700 hover:scale-105">
+                    <div class="work-card-overlay">
+                        <h3 class="text-2xl font-bold text-white mb-3">电商网站改版设计</h3>
+                        <p class="text-gray-200 mb-6">优化用户路径，提升转化率，打造沉浸式购物体验</p>
+                        <a href="#" class="text-white border border-white px-5 py-2 rounded-lg hover:bg-white hover:text-primary dark:hover:text-dark-primary transition-colors duration-300 w-fit">
+                            查看详情 <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我（高级排版） -->
+    <section id="about" class="py-24 px-6 md:px-12 bg-secondary dark:bg-dark-secondary relative">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col md:flex-row gap-16 items-center">
+                <div class="md:w-2/5 relative parallax">
+                    <div class="absolute -top-4 -left-4 w-full h-full border-2 border-accent dark:border-dark-accent rounded-xl"></div>
+                    <img src="https://picsum.photos/600/800?random=10" alt="个人形象照" class="w-full rounded-xl shadow-2xl relative z-10">
+                </div>
+                
+                <div class="md:w-3/5">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-8 text-primary dark:text-dark-primary">关于我</h2>
+                    <div class="space-y-6 text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+                        <p>
+                            拥有8年设计行业经验，曾任职于国际4A设计公司与头部互联网企业，现为自由设计师，服务过腾讯、阿里、蔚来等品牌。
+                        </p>
+                        <p>
+                            我的设计理念：<span class="text-accent dark:text-dark-accent font-medium">设计不是自我表达，而是解决问题的工具</span>。我擅长从商业目标和用户需求出发，平衡美学与功能，打造有商业价值的设计方案。
+                        </p>
+                        <p>
+                            专注领域：品牌策略与视觉设计、UI/UX设计、产品设计。
+                        </p>
+                    </div>
+                    
+                    <!-- 技能标签 -->
+                    <div class="mt-10 flex flex-wrap gap-3">
+                        <span class="px-4 py-2 bg-accent/10 dark:bg-dark-accent/20 text-accent dark:text-dark-accent rounded-full">Figma</span>
+                        <span class="px-4 py-2 bg-accent/10 dark:bg-dark-accent/20 text-accent dark:text-dark-accent rounded-full">Photoshop</span>
+                        <span class="px-4 py-2 bg-accent/10 dark:bg-dark-accent/20 text-accent dark:text-dark-accent rounded-full">Illustrator</span>
+                        <span class="px-4 py-2 bg-accent/10 dark:bg-dark-accent/20 text-accent dark:text-dark-accent rounded-full">AE</span>
+                        <span class="px-4 py-2 bg-accent/10 dark:bg-dark-accent/20 text-accent dark:text-dark-accent rounded-full">Webflow</span>
+                    </div>
+                    
+                    <!-- 社交链接 -->
+                    <div class="mt-10 flex gap-6">
+                        <a href="#" class="w-12 h-12 rounded-full bg-white dark:bg-primary flex items-center justify-center text-primary dark:text-dark-primary hover:bg-accent dark:hover:bg-dark-accent hover:text-white transition-all duration-300">
+                            <i class="fab fa-behance text-xl"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 rounded-full bg-white dark:bg-primary flex items-center justify-center text-primary dark:text-dark-primary hover:bg-accent dark:hover:bg-dark-accent hover:text-white transition-all duration-300">
+                            <i class="fab fa-dribbble text-xl"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 rounded-full bg-white dark:bg-primary flex items-center justify-center text-primary dark:text-dark-primary hover:bg-accent dark:hover:bg-dark-accent hover:text-white transition-all duration-300">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 rounded-full bg-white dark:bg-primary flex items-center justify-center text-primary dark:text-dark-primary hover:bg-accent dark:hover:bg-dark-accent hover:text-white transition-all duration-300">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系方式（高级卡片） -->
+    <section id="contact" class="py-24 px-6 md:px-12 bg-white dark:bg-primary">
+        <div class="container mx-auto max-w-5xl">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4 text-primary dark:text-dark-primary text-center">联系我</h2>
+            <p class="text-lg text-gray-600 dark:text-gray-400 mb-16 text-center max-w-2xl mx-auto">
+                欢迎探讨设计合作、项目咨询或设计交流，我会尽快回复
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- 邮箱卡片 -->
+                <div class="bg-secondary dark:bg-dark-secondary p-8 rounded-xl hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-800">
+                    <div class="w-16 h-16 rounded-full bg-accent/10 dark:bg-dark-accent/20 flex items-center justify-center text-accent dark:text-dark-accent mb-6">
+                        <i class="fas fa-envelope text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold mb-3 text-primary dark:text-dark-primary">邮箱</h4>
+                    <a href="mailto:your@email.com" class="text-gray-600 dark:text-gray-400 hover:text-accent dark:hover:text-dark-accent transition-colors duration-300">your@email.com</a>
+                </div>
+                
+                <!-- 电话卡片 -->
+                <div class="bg-secondary dark:bg-dark-secondary p-8 rounded-xl hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-800">
+                    <div class="w-16 h-16 rounded-full bg-accent/10 dark:bg-dark-accent/20 flex items-center justify-center text-accent dark:text-dark-accent mb-6">
+                        <i class="fas fa-phone text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold mb-3 text-primary dark:text-dark-primary">电话</h4>
+                    <a href="tel:+8612345678901" class="text-gray-600 dark:text-gray-400 hover:text-accent dark:hover:text-dark-accent transition-colors duration-300">+86 123 4567 8901</a>
+                </div>
+                
+                <!-- 地址卡片 -->
+                <div class="bg-secondary dark:bg-dark-secondary p-8 rounded-xl hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-800">
+                    <div class="w-16 h-16 rounded-full bg-accent/10 dark:bg-dark-accent/20 flex items-center justify-center text-accent dark:text-dark-accent mb-6">
+                        <i class="fas fa-map-marker-alt text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold mb-3 text-primary dark:text-dark-primary">工作城市</h4>
+                    <p class="text-gray-600 dark:text-gray-400">上海市 · 北京市（可远程）</p>
+                </div>
+            </div>
+            
+            <div class="mt-16 text-center">
+                <a href="mailto:your@email.com" class="inline-block bg-accent dark:bg-dark-accent text-white px-8 py-4 rounded-lg font-medium hover:bg-accent/90 dark:hover:bg-dark-accent/90 transition-all duration-300 shadow-lg hover:shadow-xl">
+                    发送合作提案 <i class="fas fa-paper-plane ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-primary dark:bg-dark-secondary py-16 px-6 md:px-12">
+        <div class="container mx-auto max-w-7xl">
+            <div class="flex flex-col md:flex-row justify-between items-center border-b border-gray-800 dark:border-gray-700 pb-12 mb-12">
+                <div class="mb-8 md:mb-0">
+                    <h3 class="text-3xl font-bold text-white dark:text-dark-primary mb-4">你的名字</h3>
+                    <p class="text-gray-500 dark:text-gray-400">创造有价值的设计</p>
+                </div>
+                
+                <div class="flex gap-6">
+                    <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-white dark:hover:text-dark-primary transition-colors duration-300">
+                        <i class="fab fa-behance text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-white dark:hover:text-dark-primary transition-colors duration-300">
+                        <i class="fab fa-dribbble text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-white dark:hover:text-dark-primary transition-colors duration-300">
+                        <i class="fab fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-white dark:hover:text-dark-primary transition-colors duration-300">
+                        <i class="fab fa-linkedin text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="text-center text-gray-500 dark:text-gray-400">
+                <p>© 2025 你的名字. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 脚本 -->
+    <script>
+        // 暗黑模式切换
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        // 初始化主题（优先本地存储）
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            // 保存主题到本地存储
+            if (html.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // 移动端菜单切换
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = menuBtn.querySelector('i');
+            if (icon.classList.contains('fa-bars')) {
+                icon.classList.replace('fa-bars', 'fa-times');
+            } else {
+                icon.classList.replace('fa-times', 'fa-bars');
+            }
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                // 关闭移动端菜单
+                mobileMenu.classList.add('hidden');
+                const icon = menuBtn.querySelector('i');
+                icon.classList.replace('fa-times', 'fa-bars');
+                
+                // 滚动到目标位置
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // 作品筛选功能
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const workCards = document.querySelectorAll('.work-card');
+        
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 切换激活状态
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const filter = btn.getAttribute('data-filter');
+                
+                // 筛选作品
+                workCards.forEach(card => {
+                    const category = card.getAttribute('data-category');
+                    if (filter === 'all' || category === filter) {
+                        card.style.display = 'block';
+                        // 添加动画
+                        card.classList.add('animate-fade-in');
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 滚动进度条
+        const progressBar = document.getElementById('progressBar');
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.offsetHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            progressBar.style.width = scrollPercent + '%';
+            
+            // 导航栏滚动效果
+            const nav = document.querySelector('nav');
+            if (scrollTop > 50) {
+                nav.classList.add('shadow-md');
+                nav.classList.remove('py-5');
+                nav.classList.add('py-3');
+            } else {
+                nav.classList.remove('shadow-md');
+                nav.classList.add('py-5');
+                nav.classList.remove('py-3');
+            }
+            
+            // 视差效果
+            const parallaxElements = document.querySelectorAll('.parallax');
+            parallaxElements.forEach(el => {
+                el.style.transform = `translateY(${scrollTop * 0.05}px)`;
+            });
+        });
+
+        // 元素进入视口动画
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-slide-up');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // 监听所有需要动画的元素
+        document.querySelectorAll('section > div > *').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
