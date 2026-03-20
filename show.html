@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>亚马逊3C数码产品详情页 - 你的名字 | 设计师作品集</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- 引入Inter字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 自定义配置 -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1A1A1A',
+                        secondary: '#F8F9FA',
+                        accent: '#2563EB',
+                        amazon: {
+                            red: '#FF9900', // 亚马逊橙红色
+                            blue: '#007185', // 亚马逊蓝色
+                            light: '#F0F2F2',
+                            dark: '#111827'
+                        },
+                        dark: {
+                            primary: '#F8F9FA',
+                            secondary: '#2D2D2D',
+                            accent: '#60A5FA'
+                        }
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        amazon: ['Amazon Ember', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.8s ease-in-out',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'fade-slide': 'fadeSlide 0.5s ease-in-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        fadeSlide: {
+                            '0%': { opacity: '0', transform: 'scale(0.98)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-balance {
+                text-wrap: balance;
+            }
+            .nav-link {
+                @apply px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-accent dark:hover:text-dark-accent transition-colors duration-300;
+            }
+            .project-nav-btn {
+                @apply w-12 h-12 rounded-full bg-white dark:bg-dark-secondary flex items-center justify-center text-primary dark:text-dark-primary hover:bg-accent dark:hover:bg-dark-accent hover:text-white transition-all duration-300 shadow-md;
+            }
+            /* 亚马逊风格按钮 */
+            .amazon-btn {
+                @apply w-full py-2 rounded-md text-sm font-medium transition-all duration-200;
+            }
+            .amazon-btn-primary {
+                @apply bg-amazon-red/90 hover:bg-amazon-red text-white border border-amazon-red/30;
+            }
+            .amazon-btn-secondary {
+                @apply bg-amazon-light hover:bg-gray-200 text-amazon-dark border border-gray-300;
+            }
+            /* 产品图片缩略图激活态 */
+            .thumb-active {
+                @apply border-2 border-amazon-blue;
+            }
+            /* 图片轮播容器 */
+            .carousel-container {
+                @apply relative overflow-hidden;
+            }
+        }
+    </style>
+</head>
+<body class="bg-secondary dark:bg-primary font-inter text-gray-800 dark:text-gray-200 antialiased">
+    <!-- 进度条 -->
+    <div id="progressBar" class="fixed top-0 left-0 h-1 bg-accent dark:bg-dark-accent z-50 origin-left w-0 transition-all duration-300"></div>
+
+    <!-- 暗黑模式切换 -->
+    <button id="themeToggle" class="fixed top-6 right-6 z-50 w-10 h-10 rounded-full bg-white/80 dark:bg-dark-secondary/80 backdrop-blur-sm flex items-center justify-center text-primary dark:text-dark-primary hover:bg-accent/10 dark:hover:bg-dark-accent/20 transition-all duration-300">
+        <i class="fas fa-moon dark:hidden text-xl"></i>
+        <i class="fas fa-sun hidden dark:block text-xl"></i>
+    </button>
+
+    <!-- 导航栏 -->
+    <nav class="fixed w-full bg-white/90 dark:bg-primary/90 backdrop-blur-md z-40 border-b border-gray-100 dark:border-gray-800 transition-all duration-500">
+        <div class="container mx-auto px-6 md:px-12 py-5 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-primary dark:text-dark-primary tracking-tight">你的名字</a>
+            
+            <!-- 桌面端导航 -->
+            <div class="hidden md:flex items-center space-x-1">
+                <a href="index.html#hero" class="nav-link">首页</a>
+                <a href="index.html#works" class="nav-link">作品</a>
+                <a href="index.html#about" class="nav-link">关于</a>
+                <a href="index.html#contact" class="nav-link">联系</a>
+            </div>
+            
+            <!-- 移动端菜单按钮 -->
+            <button id="menuBtn" class="md:hidden text-primary dark:text-dark-primary text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div id="mobileMenu" class="md:hidden hidden bg-white dark:bg-primary border-b border-gray-100 dark:border-gray-800 animate-fade-in">
+            <div class="container mx-auto px-6 py-4 flex flex-col space-y-3">
+                <a href="index.html#hero" class="nav-link py-3">首页</a>
+                <a href="index.html#works" class="nav-link py-3">作品</a>
+                <a href="index.html#about" class="nav-link py-3">关于</a>
+                <a href="index.html#contact" class="nav-link py-3">联系</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 作品说明头部 -->
+    <section class="pt-32 pb-8 px-6 md:px-12">
+        <div class="container mx-auto max-w-6xl">
+            <!-- 面包屑导航 -->
+            <div class="mb-8 text-sm text-gray-500 dark:text-gray-400">
+                <a href="index.html" class="hover:text-accent dark:hover:text-dark-accent">首页</a>
+                <span class="mx-2">/</span>
+                <a href="index.html#works" class="hover:text-accent dark:hover:text-dark-accent">作品</a>
+                <span class="mx-2">/</span>
+                <span>亚马逊产品详情页设计</span>
+            </div>
+            
+            <!-- 作品标题与标签 -->
+            <div class="mb-8 text-center">
+                <span class="inline-block px-4 py-1 rounded-full bg-accent/10 dark:bg-dark-accent/20 text-accent dark:text-dark-accent text-sm font-medium mb-4">跨境电商设计 | 亚马逊详情页</span>
+                <h1 class="text-4xl md:text-5xl font-bold mb-4 text-primary dark:text-dark-primary text-balance">66W快充数据线 - 亚马逊详情页设计</h1>
+                <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">还原亚马逊产品购买页交互逻辑，展示跨境7张主图+详情页一体化设计成果</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 仿亚马逊产品详情核心区域 -->
+    <section class="py-8 px-6 md:px-12 bg-white dark:bg-dark-secondary">
+        <div class="container mx-auto max-w-6xl">
+            <!-- 亚马逊风格产品页布局 -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- 左侧产品图片区域 (8列) -->
+                <div class="lg:col-span-8">
+                    <!-- 主图轮播展示区 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4 mb-4 shadow-sm border border-gray-200 dark:border-gray-700 carousel-container">
+                        <img id="mainProductImg" src="https://picsum.photos/800/800?random=501" alt="66W快充数据线主图" class="w-full h-auto rounded-md animate-fade-slide">
+                        
+                        <!-- 轮播控制按钮 -->
+                        <button id="prevBtn" class="absolute top-1/2 left-4 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-all duration-300">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button id="nextBtn" class="absolute top-1/2 right-4 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-all duration-300">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- 7张缩略图导航 - 优化布局：两行展示（第一行4张，第二行3张） -->
+                    <div class="grid grid-cols-4 md:grid-cols-7 gap-2 mb-2">
+                        <img src="https://picsum.photos/800/800?random=501" alt="主图" class="w-full h-16 md:h-20 object-cover rounded-md cursor-pointer thumb-active border border-gray-200 dark:border-gray-700" onclick="changeMainImg(this.src, 0)">
+                        <img src="https://picsum.photos/800/800?random=502" alt="细节图1" class="w-full h-16 md:h-20 object-cover rounded-md cursor-pointer border border-gray-200 dark:border-gray-700 hover:opacity-90" onclick="changeMainImg(this.src, 1)">
+                        <img src="https://picsum.photos/800/800?random=503" alt="细节图2" class="w-full h-16 md:h-20 object-cover rounded-md cursor-pointer border border-gray-200 dark:border-gray-700 hover:opacity-90" onclick="changeMainImg(this.src, 2)">
+                        <img src="https://picsum.photos/800/800?random=504" alt="场景图" class="w-full h-16 md:h-20 object-cover rounded-md cursor-pointer border border-gray-200 dark:border-gray-700 hover:opacity-90" onclick="changeMainImg(this.src, 3)">
+                        <img src="https://picsum.photos/800/800?random=505" alt="参数图" class="w-full h-16 md:h-20 object-cover rounded-md cursor-pointer border border-gray-200 dark:border-gray-700 hover:opacity-90" onclick="changeMainImg(this.src, 4)">
+                        <img src="https://picsum.photos/800/800?random=506" alt="对比图" class="w-full h-16 md:h-20 object-cover rounded-md cursor-pointer border border-gray-200 dark:border-gray-700 hover:opacity-90" onclick="changeMainImg(this.src, 5)">
+                        <img src="https://picsum.photos/800/800?random=507" alt="包装图" class="w-full h-16 md:h-20 object-cover rounded-md cursor-pointer border border-gray-200 dark:border-gray-700 hover:opacity-90" onclick="changeMainImg(this.src, 6)">
+                    </div>
+                    
+                    <!-- 产品详情描述 -->
+                    <div class="mt-8 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                        <h2 class="text-2xl font-bold text-primary dark:text-dark-primary mb-4">产品详情</h2>
+                        <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                            <p><strong>核心卖点：</strong>66W超级快充，兼容华为/小米/OPPO等主流品牌，编织线身耐用防断，1.2米加长设计，支持数据传输。</p>
+                            <p><strong>材质：</strong>高纯度铜芯+尼龙编织外层，抗氧化、防缠绕、耐高低温。</p>
+                            <p><strong>兼容设备：</strong>智能手机、平板、充电宝、蓝牙耳机等Type-C接口设备。</p>
+                            <p><strong>包装清单：</strong>1×66W快充数据线，1×使用说明书，1×售后保障卡。</p>
+                            <p><strong>售后保障：</strong>30天无理由退换，1年免费换新，终身技术支持。</p>
+                        </div>
+                        
+                        <!-- 产品参数表 -->
+                        <div class="mt-8">
+                            <h3 class="text-xl font-semibold mb-3 text-primary dark:text-dark-primary">技术参数</h3>
+                            <table class="w-full border-collapse">
+                                <thead>
+                                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                                        <th class="text-left py-2 px-3 text-gray-600 dark:text-gray-400">参数项</th>
+                                        <th class="text-left py-2 px-3 text-gray-600 dark:text-gray-400">规格</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-700 dark:text-gray-300">
+                                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                                        <td class="py-2 px-3">最大输出功率</td>
+                                        <td class="py-2 px-3">66W</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                                        <td class="py-2 px-3">接口类型</td>
+                                        <td class="py-2 px-3">Type-C to Type-C</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                                        <td class="py-2 px-3">线长</td>
+                                        <td class="py-2 px-3">1.2米</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                                        <td class="py-2 px-3">传输速率</td>
+                                        <td class="py-2 px-3">480Mbps</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 px-3">工作温度</td>
+                                        <td class="py-2 px-3">-20℃ ~ 60℃</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧购买信息区域 (4列) -->
+                <div class="lg:col-span-4">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700 sticky top-24">
+                        <!-- 产品标题 -->
+                        <h2 class="text-xl font-bold text-primary dark:text-dark-primary mb-2">66W USB-C to USB-C Fast Charging Cable</h2>
+                        
+                        <!-- 评分 -->
+                        <div class="flex items-center mb-4">
+                            <div class="flex text-amazon-red">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">(1,289 评价)</span>
+                        </div>
+                        
+                        <!-- 价格区域 -->
+                        <div class="mb-4">
+                            <span class="text-3xl font-bold text-amazon-red">$12.99</span>
+                            <span class="text-sm line-through text-gray-500 dark:text-gray-400 ml-2">$19.99</span>
+                            <p class="text-green-600 dark:text-green-500 text-sm mt-1">Save $7.00 (35%)</p>
+                        </div>
+                        
+                        <!-- 库存状态 -->
+                        <div class="mb-4">
+                            <p class="text-green-600 dark:text-green-500 font-medium">In Stock</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Ships from and sold by Amazon US</p>
+                        </div>
+                        
+                        <!-- 配送信息 -->
+                        <div class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                            <p><i class="fas fa-truck text-amazon-blue mr-2"></i> Free shipping on orders over $25.00</p>
+                            <p class="mt-1">Delivery: Oct 12 - Oct 15 to United States</p>
+                        </div>
+                        
+                        <!-- 数量选择 -->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Quantity:</label>
+                            <select class="w-full py-2 px-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5+</option>
+                            </select>
+                        </div>
+                        
+                        <!-- 购买按钮 -->
+                        <div class="space-y-2 mb-6">
+                            <button class="amazon-btn amazon-btn-primary">
+                                Add to Cart
+                            </button>
+                            <button class="amazon-btn amazon-btn-secondary">
+                                Buy Now
+                            </button>
+                        </div>
+                        
+                        <!-- 保障信息 -->
+                        <div class="border-t border-b border-gray-200 dark:border-gray-700 py-3 mb-4">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-shield-alt text-amazon-blue mr-2"></i>
+                                <span class="text-sm text-gray-700 dark:text-gray-300">Amazon Protection Plan Available</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-gift text-amazon-blue mr-2"></i>
+                                <span class="text-sm text-gray-700 dark:text-gray-300">Gift options available</span>
+                            </div>
+                        </div>
+                        
+                        <!-- 产品特性 -->
+                        <div>
+                            <h3 class="text-sm font-bold mb-2 text-primary dark:text-dark-primary">Key Features:</h3>
+                            <ul class="text-sm text-gray-700 dark:text-gray-300 list-disc list-inside space-y-1">
+                                <li>66W Super Fast Charging</li>
+                                <li>Nylon Braided Durable Cable</li>
+                                <li>1.2M Long Length</li>
+                                <li>Data Transfer Support</li>
+                                <li>Wide Compatibility</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 设计说明 - 补充7张主图设计逻辑 -->
+            <div class="mt-12 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                <h2 class="text-2xl font-bold text-primary dark:text-dark-primary mb-4">设计说明</h2>
+                <div class="prose prose-lg dark:prose-invert max-w-none">
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                        本次亚马逊详情页设计严格遵循亚马逊平台规范：7张主图依次为「纯白背景主图→产品细节图1→产品细节图2→使用场景图→技术参数图→竞品对比图→包装展示图」，主图采用纯白背景（RGB 255,255,255），产品占比≥85%，无任何文字/水印；辅图依次展示产品细节、使用场景、技术参数，符合亚马逊A9算法的推荐逻辑。
+                    </p>
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed mt-4">
+                        视觉上采用亚马逊用户熟悉的布局逻辑，左侧图片区+右侧购买区的经典结构，重点突出价格、库存、配送等核心购买决策信息，同时通过清晰的参数表和卖点描述降低用户决策成本。配色上适配亚马逊品牌调性，橙红色按钮提升购买转化，蓝色强调关键信息，整体视觉简洁专业，符合欧美用户的审美习惯。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 作品导航 -->
+    <section class="py-16 px-6 md:px-12">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+                <a href="work-detail-3.html" class="project-nav-btn">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+                <a href="index.html#works" class="px-8 py-3 rounded-lg border border-gray-300 dark:border-gray-700 text-primary dark:text-dark-primary hover:border-accent dark:hover:border-dark-accent hover:text-accent dark:hover:text-dark-accent transition-all duration-300">
+                    返回作品列表
+                </a>
+                <a href="work-detail-5.html" class="project-nav-btn">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-primary dark:bg-dark-secondary py-16 px-6 md:px-12">
+        <div class="container mx-auto max-w-7xl">
+            <div class="flex flex-col md:flex-row justify-between items-center border-b border-gray-800 dark:border-gray-700 pb-12 mb-12">
+                <div class="mb-8 md:mb-0">
+                    <h3 class="text-3xl font-bold text-white dark:text-dark-primary mb-4">你的名字</h3>
+                    <p class="text-gray-500 dark:text-gray-400">创造有价值的设计</p>
+                </div>
+                
+                <div class="flex gap-6">
+                    <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-white dark:hover:text-dark-primary transition-colors duration-300">
+                        <i class="fab fa-behance text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-white dark:hover:text-dark-primary transition-colors duration-300">
+                        <i class="fab fa-dribbble text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-white dark:hover:text-dark-primary transition-colors duration-300">
+                        <i class="fab fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-white dark:hover:text-dark-primary transition-colors duration-300">
+                        <i class="fab fa-linkedin text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="text-center text-gray-500 dark:text-gray-400">
+                <p>© 2025 你的名字. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 脚本 -->
+    <script>
+        // 暗黑模式切换
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        });
+
+        // 移动端菜单切换
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = menuBtn.querySelector('i');
+            icon.classList.replace(icon.classList.contains('fa-bars') ? 'fa-bars' : 'fa-times', icon.classList.contains('fa-bars') ? 'fa-times' : 'fa-bars');
+        });
+
+        // 滚动进度条
+        const progressBar = document.getElementById('progressBar');
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.offsetHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            progressBar.style.width = scrollPercent + '%';
+            
+            // 导航栏滚动效果
+            const nav = document.querySelector('nav');
+            if (scrollTop > 50) {
+                nav.classList.add('shadow-md');
+                nav.classList.remove('py-5');
+                nav.classList.add('py-3');
+            } else {
+                nav.classList.remove('shadow-md');
+                nav.classList.add('py-5');
+                nav.classList.remove('py-3');
+            }
+        });
+
+        // 图片轮播核心逻辑
+        const mainImg = document.getElementById('mainProductImg');
+        const thumbs = document.querySelectorAll('.grid-cols-4 img, .grid-cols-7 img');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        
+        // 图片列表（对应7张缩略图）
+        const imgList = [
+            'https://picsum.photos/800/800?random=501',
+            'https://picsum.photos/800/800?random=502',
+            'https://picsum.photos/800/800?random=503',
+            'https://picsum.photos/800/800?random=504',
+            'https://picsum.photos/800/800?random=505',
+            'https://picsum.photos/800/800?random=506',
+            'https://picsum.photos/800/800?random=507'
+        ];
+        
+        let currentIndex = 0; // 当前显示的图片索引
+        let autoplayInterval; // 自动播放定时器
+        
+        // 初始化自动播放
+        initAutoplay();
+        
+        // 手动切换图片函数
+        function changeMainImg(src, index) {
+            // 停止自动播放，5秒后重新开始
+            stopAutoplay();
+            
+            mainImg.src = src;
+            currentIndex = index || 0;
+            
+            // 重置所有缩略图激活态
+            thumbs.forEach(thumb => {
+                thumb.classList.remove('thumb-active');
+            });
+            
+            // 设置当前缩略图激活态
+            if (event) {
+                event.target.classList.add('thumb-active');
+            } else {
+                thumbs[currentIndex].classList.add('thumb-active');
+            }
+            
+            // 5秒后重新启动自动播放
+            setTimeout(initAutoplay, 5000);
+        }
+        
+        // 上一张
+        function prevImg() {
+            currentIndex = (currentIndex - 1 + imgList.length) % imgList.length;
+            changeMainImg(imgList[currentIndex], currentIndex);
+        }
+        
+        // 下一张
+        function nextImg() {
+            currentIndex = (currentIndex + 1) % imgList.length;
+            changeMainImg(imgList[currentIndex], currentIndex);
+        }
+        
+        // 初始化自动播放（3秒切换一次）
+        function initAutoplay() {
+            autoplayInterval = setInterval(() => {
+                nextImg();
+            }, 3000);
+        }
+        
+        // 停止自动播放
+        function stopAutoplay() {
+            clearInterval(autoplayInterval);
+        }
+        
+        // 绑定按钮事件
+        prevBtn.addEventListener('click', prevImg);
+        nextBtn.addEventListener('click', nextImg);
+        
+        // 鼠标悬停在主图区域时暂停自动播放，离开后恢复
+        document.querySelector('.carousel-container').addEventListener('mouseenter', stopAutoplay);
+        document.querySelector('.carousel-container').addEventListener('mouseleave', initAutoplay);
+    </script>
+</body>
+</html>
